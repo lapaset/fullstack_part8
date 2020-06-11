@@ -1,0 +1,23 @@
+{
+  "name": "library-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lapaset/fullstack_part8.git"
+  },
+  "author": "Liisa Lahti",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lapaset/fullstack_part8/issues"
+  },
+  "homepage": "https://github.com/lapaset/fullstack_part8#readme",
+  "dependencies": {
+    "apollo-server": "^2.14.3",
+    "graphql": "^15.1.0"
+  }
+}
