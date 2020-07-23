@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { ADD_BOOK, ALL } from '../queries'
+import { ADD_BOOK } from '../queries'
 
-const NewBook = (props) => {
+const NewBook = ({ show, notify, updateCacheWith }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('')
@@ -10,22 +10,29 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([])
 
   const [ addBook ] = useMutation(ADD_BOOK, {
-    refetchQueries: [ { query: ALL }],
     onError: error => {
-      console.log(error.message)
+      if (error.graphQLErrors[0])
+        notify(error.graphQLErrors[0].message)      
+      if (error.networkError)
+        console.log(`Network error: `, error.networkError.message)
+    },
+    update: (store, response) => {
+      updateCacheWith(response.data.addBook)
     }
   })
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
   const submit = async (event) => {
     event.preventDefault()
-    
-    addBook({ variables: { title, published: parseInt(published), author, genres }})
-    console.log('add book...')
 
+    if (published.length > 0)
+      addBook({ variables: { title, published: parseInt(published), author, genres }})
+    else
+      notify('Published field missing')
+    
     setTitle('')
     setPublished('')
     setAuthor('')
@@ -40,6 +47,7 @@ const NewBook = (props) => {
 
   return (
     <div>
+      <h2>add book</h2>
       <form onSubmit={submit}>
         <div>
           title

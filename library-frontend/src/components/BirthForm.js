@@ -4,19 +4,32 @@ import Select from 'react-select'
 
 import { EDIT_AUTHOR } from '../queries'
 
-const BirthForm = ({ authors }) => {
+const BirthForm = ({ authors, notify, token }) => {
   const [ name, setName ] = useState('')
   const [ born, setBorn ] = useState('')
-  
-  const [ editAuthor ] = useMutation(EDIT_AUTHOR)
+
+  const [ editAuthor ] = useMutation(EDIT_AUTHOR, {
+    onError: error => {
+      if (error.graphGLErrors)
+        notify(error.graphQLErrors[0].message)      
+      if (error.networkError)
+        console.log(`Network error: `, error.networkError.message)
+    }
+  })
 
   const submit = async event => {
     event.preventDefault()
-
-    editAuthor({ variables: { name, setBornTo: parseInt(born) } })
+    
+    if (name.length > 0 && born.length > 0)
+      editAuthor({ variables: { name, setBornTo: parseInt(born) } })
+    else
+      notify('Value missing')
     setName('')
     setBorn('')
   }
+
+  if (!token)
+    return null
 
   const options = authors.map(a => { return ({ value: a.name, label: a.name })})
 
