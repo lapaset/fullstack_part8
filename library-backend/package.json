@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/lapaset/fullstack_part8#readme",
   "dependencies": {
-    "apollo-server": "^2.14.3",
+    "apollo-server": "^2.25.3",
     "dotenv": "^8.2.0",
     "graphql": "^15.1.0",
     "mongoose": "^5.9.18",
